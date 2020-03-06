@@ -4,12 +4,44 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HTMLWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
+const isDev = process.env.NODE_ENV === 'development';
+
+// Plugins function
+const applyPlugins = () => {
+  return [
+    new CleanWebpackPlugin(),
+    new CopyWebpackPlugin([
+      {
+        from: path.resolve(__dirname, 'src/favicon.ico'),
+        to: path.resolve(__dirname, 'dist')
+      },
+      {
+        from: path.resolve(__dirname, 'src/img'),
+        to: path.resolve(__dirname, 'dist/img')
+      }
+    ]),
+    new HTMLWebpackPlugin({
+      template: './index.html',
+      minify: {
+        collapseWhitespace: !isDev
+      }
+    }),
+    new MiniCssExtractPlugin({
+      filename: 'css/[name].[contenthash].css'
+    })
+  ];
+};
+
 // Styles function
 const runStyleLoader = param => {
   const loaders = [
     {
       loader: MiniCssExtractPlugin.loader,
-      options: { publicPath: '../' }
+      options: {
+        hmr: isDev,
+        reloadAll: true,
+        publicPath: '../'
+      }
     },
     'css-loader',
     {
@@ -25,34 +57,6 @@ const runStyleLoader = param => {
   }
 
   return loaders;
-};
-
-// Plugins function
-const applyPlugins = () => {
-  const base = [
-    new CleanWebpackPlugin(),
-    new CopyWebpackPlugin([
-      {
-        from: path.resolve(__dirname, 'src/favicon.ico'),
-        to: path.resolve(__dirname, 'dist')
-      },
-      {
-        from: path.resolve(__dirname, 'src/img'),
-        to: path.resolve(__dirname, 'dist/img')
-      }
-    ]),
-    new HTMLWebpackPlugin({
-      template: './index.html',
-      minify: {
-        collapseWhitespace: true
-      }
-    }),
-    new MiniCssExtractPlugin({
-      filename: 'css/[name].[contenthash].css'
-    })
-  ];
-
-  return base;
 };
 
 module.exports = {
@@ -98,7 +102,8 @@ module.exports = {
     ]
   },
   devServer: {
+    hot: isDev,
     overlay: true,
-    port: 8081
+    port: 8081,
   },
 };
