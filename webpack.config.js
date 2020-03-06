@@ -5,7 +5,7 @@ const HTMLWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 // Styles function
-const styleLoader = param => {
+const runStyleLoader = param => {
   const loaders = [
     {
       loader: MiniCssExtractPlugin.loader,
@@ -27,16 +27,9 @@ const styleLoader = param => {
   return loaders;
 };
 
-module.exports = {
-  context: path.resolve(__dirname, 'src'),
-  entry: {
-    app: './index.js'
-  },
-  output: {
-    filename: 'js/[name].[contenthash].js',
-    path: path.resolve(__dirname, 'dist'),
-  },
-  plugins: [
+// Plugins function
+const applyPlugins = () => {
+  const base = [
     new CleanWebpackPlugin(),
     new CopyWebpackPlugin([
       {
@@ -57,7 +50,21 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: 'css/[name].[contenthash].css'
     })
-  ],
+  ];
+
+  return base;
+};
+
+module.exports = {
+  context: path.resolve(__dirname, 'src'),
+  entry: {
+    app: './index.js'
+  },
+  output: {
+    filename: 'js/[name].[contenthash].js',
+    path: path.resolve(__dirname, 'dist'),
+  },
+  plugins: applyPlugins(),
   module: {
     rules: [
       // JavaScript
@@ -81,12 +88,12 @@ module.exports = {
       // Sass
       {
         test: /\.s[ac]ss$/,
-        use: styleLoader('sass-loader')
+        use: runStyleLoader('sass-loader')
       },
       // Css
       {
         test: /\.css$/,
-        use: styleLoader()
+        use: runStyleLoader()
       }
     ]
   },
