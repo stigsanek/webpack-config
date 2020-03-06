@@ -4,6 +4,29 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HTMLWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
+// Styles function
+const styleLoader = param => {
+  const loaders = [
+    {
+      loader: MiniCssExtractPlugin.loader,
+      options: { publicPath: '../' }
+    },
+    'css-loader',
+    {
+      loader: 'postcss-loader',
+      options: {
+        config: { path: './postcss.config.js' }
+      }
+    }
+  ];
+
+  if (param) {
+    loaders.push(param);
+  }
+
+  return loaders;
+};
+
 module.exports = {
   context: path.resolve(__dirname, 'src'),
   entry: {
@@ -58,21 +81,12 @@ module.exports = {
       // Sass
       {
         test: /\.s[ac]ss$/,
-        use: [
-          'style-loader',
-          {
-            loader: MiniCssExtractPlugin.loader,
-            options: { publicPath: '../' }
-          },
-          'css-loader',
-          {
-            loader: 'postcss-loader',
-            options: {
-              config: { path: './postcss.config.js' }
-            }
-          },
-          'sass-loader'
-        ]
+        use: styleLoader('sass-loader')
+      },
+      // Css
+      {
+        test: /\.css$/,
+        use: styleLoader()
       }
     ]
   },
@@ -80,4 +94,4 @@ module.exports = {
     overlay: true,
     port: 8081
   },
-}
+};

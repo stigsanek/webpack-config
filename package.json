@@ -36,7 +36,6 @@
     "node-sass": "^4.13.x",
     "postcss-loader": "^3.0.x",
     "sass-loader": "^8.0.x",
-    "style-loader": "^1.1.x",
     "webpack": "^4.42.x",
     "webpack-cli": "^3.3.x",
     "webpack-dev-server": "^3.10.x"
