@@ -32,6 +32,19 @@ const applyPlugins = () => {
   ];
 };
 
+// Scripts function
+const runScriptLoader = () => {
+  const loaders = [{
+    loader: 'babel-loader'
+  }];
+
+  if (isDev) {
+    loaders.push('eslint-loader');
+  }
+
+  return loaders;
+};
+
 // Styles function
 const runStyleLoader = param => {
   const loaders = [
@@ -75,8 +88,8 @@ module.exports = {
       // JavaScript
       {
         test: /\.js$/,
-        loader: 'babel-loader',
-        exclude: '/node_modules/'
+        exclude: '/node_modules/',
+        use: runScriptLoader()
       },
       // Fonts
       {
