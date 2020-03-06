@@ -68,6 +68,7 @@ module.exports = {
     filename: 'js/[name].[contenthash].js',
     path: path.resolve(__dirname, 'dist'),
   },
+  devtool: isDev ? 'source-map' : '',
   plugins: applyPlugins(),
   module: {
     rules: [
