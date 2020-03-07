@@ -6,6 +6,17 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const isDev = process.env.NODE_ENV === 'development';
 
+// Name create function
+const createName = (ext) => {
+  let name = `${ext}/[name].`;
+
+  if (!isDev) {
+    name += '[contenthash].';
+  }
+
+  return name += ext;
+}
+
 // Plugins function
 const applyPlugins = () => {
   return [
@@ -27,7 +38,7 @@ const applyPlugins = () => {
       }
     }),
     new MiniCssExtractPlugin({
-      filename: 'css/[name].[contenthash].css'
+      filename: createName('css')
     })
   ];
 };
@@ -78,7 +89,7 @@ module.exports = {
     app: './index.js'
   },
   output: {
-    filename: 'js/[name].[contenthash].js',
+    filename: createName('js'),
     path: path.resolve(__dirname, 'dist'),
   },
   devtool: isDev ? 'source-map' : '',
