@@ -41,7 +41,7 @@ const applyPlugins = () => {
       filename: createName('css')
     })
   ];
-};
+}
 
 // Scripts function
 const runScriptLoader = () => {
@@ -54,7 +54,7 @@ const runScriptLoader = () => {
   }
 
   return loaders;
-};
+}
 
 // Styles function
 const runStyleLoader = param => {
@@ -81,7 +81,7 @@ const runStyleLoader = param => {
   }
 
   return loaders;
-};
+}
 
 module.exports = {
   context: path.resolve(__dirname, 'src'),
@@ -131,4 +131,4 @@ module.exports = {
     overlay: true,
     port: 8081,
   },
-};
+}
