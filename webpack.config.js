@@ -1,3 +1,8 @@
+const Path = {
+  FROM: 'src',
+  TO: 'dist'
+};
+
 const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
@@ -23,12 +28,9 @@ const applyPlugins = () => {
     new CleanWebpackPlugin(),
     new CopyWebpackPlugin([
       {
-        from: path.resolve(__dirname, 'src/favicon.ico'),
-        to: path.resolve(__dirname, 'dist')
-      },
-      {
-        from: path.resolve(__dirname, 'src/img'),
-        to: path.resolve(__dirname, 'dist/img')
+        from: path.resolve(__dirname, `${Path.FROM}/**/*`),
+        to: path.resolve(__dirname, `${Path.TO}`),
+        ignore: ['*.css', '*.js', '*.scss', '*.sass']
       }
     ]),
     new HTMLWebpackPlugin({
@@ -84,13 +86,13 @@ const runStyleLoader = param => {
 }
 
 module.exports = {
-  context: path.resolve(__dirname, 'src'),
+  context: path.resolve(__dirname, Path.FROM),
   entry: {
     app: './index.js'
   },
   output: {
     filename: createName('js'),
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, Path.TO),
   },
   devtool: isDev ? 'source-map' : '',
   plugins: applyPlugins(),
